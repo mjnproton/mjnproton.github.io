@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjnproton.github.io/"/>
-  <updated>2019-06-15T01:30:23.136Z</updated>
+  <updated>2019-06-14T22:42:42.897Z</updated>
   <id>https://mjnproton.github.io/</id>
   
   <author>
@@ -15,27 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="https://mjnproton.github.io/2019/06/15/%E6%B5%8B%E8%AF%95/"/>
-    <id>https://mjnproton.github.io/2019/06/15/测试/</id>
-    <published>2019-06-15T01:30:23.003Z</published>
-    <updated>2019-06-15T01:30:23.136Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="这算是我的第一个博客文字"><a href="#这算是我的第一个博客文字" class="headerlink" title="这算是我的第一个博客文字"></a>这算是我的第一个博客文字</h1>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;这算是我的第一个博客文字&quot;&gt;&lt;a href=&quot;#这算是我的第一个博客文字&quot; class=&quot;headerlink&quot; title=&quot;这算是我的第一个博客文字&quot;&gt;&lt;/a&gt;这算是我的第一个博客文字&lt;/h1&gt;
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>这是我第一篇微博，啊，你好世界</title>
