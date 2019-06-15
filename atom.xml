@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjnproton.github.io/"/>
-  <updated>2019-06-15T02:29:56.753Z</updated>
+  <updated>2019-06-15T03:35:56.528Z</updated>
   <id>https://mjnproton.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>又是一个新的进步</title>
+    <link href="https://mjnproton.github.io/2019/06/15/%E5%8F%88%E6%98%AF%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E8%BF%9B%E6%AD%A5/"/>
+    <id>https://mjnproton.github.io/2019/06/15/又是一个新的进步/</id>
+    <published>2019-06-15T03:35:10.000Z</published>
+    <updated>2019-06-15T03:35:56.528Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用管理面板进行的编辑<br>虽然我不是很懂马克编辑<br>但是还是感觉挺有趣的</p><p><img src="%5Cimages%5Cpasted-0.png" alt="upload successful"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;使用管理面板进行的编辑&lt;br&gt;虽然我不是很懂马克编辑&lt;br&gt;但是还是感觉挺有趣的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;%5Cimages%5Cpasted-0.png&quot; alt=&quot;upload successful&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>第一份心情</title>
     <link href="https://mjnproton.github.io/2019/06/15/%E6%B5%8B%E8%AF%95/"/>
     <id>https://mjnproton.github.io/2019/06/15/测试/</id>
-    <published>2019-06-15T00:50:07.000Z</published>
-    <updated>2019-06-15T02:29:56.753Z</updated>
+    <published>2019-06-15T00:50:00.000Z</published>
+    <updated>2019-06-15T03:33:05.294Z</updated>
     
     <content type="html"><![CDATA[<p>磕磕绊绊写下这段文字，真的发出了老母亲般的微笑，一步步搭建这个博客，失败了好多次，中间好多次出现问题，幸运的是成功了。<br>相信自己<br>努力</p>]]></content>
     
