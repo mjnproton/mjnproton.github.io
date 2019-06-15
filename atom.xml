@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjnproton.github.io/"/>
-  <updated>2019-06-14T22:42:42.897Z</updated>
+  <updated>2019-06-15T02:29:56.753Z</updated>
   <id>https://mjnproton.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第一份心情</title>
+    <link href="https://mjnproton.github.io/2019/06/15/%E6%B5%8B%E8%AF%95/"/>
+    <id>https://mjnproton.github.io/2019/06/15/测试/</id>
+    <published>2019-06-15T00:50:07.000Z</published>
+    <updated>2019-06-15T02:29:56.753Z</updated>
+    
+    <content type="html"><![CDATA[<p>磕磕绊绊写下这段文字，真的发出了老母亲般的微笑，一步步搭建这个博客，失败了好多次，中间好多次出现问题，幸运的是成功了。<br>相信自己<br>努力</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;磕磕绊绊写下这段文字，真的发出了老母亲般的微笑，一步步搭建这个博客，失败了好多次，中间好多次出现问题，幸运的是成功了。&lt;br&gt;相信自己&lt;br&gt;努力&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>这是我第一篇微博，啊，你好世界</title>
