@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机视频播放器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .upload-section.dragover {
+            border-color: #667eea;
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .video-player {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #videoElement {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .video-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .video-list h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .video-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-item.playing {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .video-name {
+            font-weight: 500;
+            flex: 1;
+            margin-right: 10px;
+            word-break: break-all;
+        }
+
+        .play-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .current-playing {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.1s ease;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .control-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 随机视频播放器</h1>
+            <p>上传您的视频文件，享受随机播放的乐趣！</p>
+        </div>
+
+        <div class="upload-section" id="uploadSection">
+            <h3>📁 拖拽视频文件到这里或点击上传</h3>
+            <p>支持 MP4, AVI, MOV, WMV, MKV 等格式</p>
+            <br>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                选择视频文件
+            </button>
+            <input type="file" id="fileInput" class="file-input" multiple accept="video/*">
+        </div>
+
+        <div class="current-playing" id="currentPlaying" style="display: none;">
+            当前播放: <span id="currentVideoName"></span>
+        </div>
+
+        <div class="video-player">
+            <video id="videoElement" controls>
+                您的浏览器不支持视频播放。
+            </video>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">00:00</span>
+                <span id="duration">00:00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="randomPlayBtn" onclick="playRandom()">🎲 随机播放</button>
+            <button class="control-btn" id="playPauseBtn" onclick="togglePlayPause()" disabled>⏯️ 播放/暂停</button>
+            <button class="control-btn" id="prevBtn" onclick="playPrevious()" disabled>⏮️ 上一个</button>
+            <button class="control-btn" id="nextBtn" onclick="playNext()" disabled>⏭️ 下一个</button>
+            <button class="control-btn" id="clearAllBtn" onclick="clearAll()">🗑️ 清空所有</button>
+        </div>
+
+        <div class="video-list">
+            <h3>📋 视频列表 (<span id="videoCount">0</span>)</h3>
+            <div id="videoListContainer">
+                <p style="text-align: center; color: #666; padding: 20px;">还没有上传视频，快来添加一些吧！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let videoFiles = [];
+        let currentVideoIndex = -1;
+        let isPlaying = false;
+        let isAutoPlay = false;
+
+        const videoElement = document.getElementById('videoElement');
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const videoListContainer = document.getElementById('videoListContainer');
+        const currentPlaying = document.getElementById('currentPlaying');
+        const currentVideoName = document.getElementById('currentVideoName');
+        const videoCount = document.getElementById('videoCount');
+        const progressBar = document.getElementById('progressBar');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+
+        // 文件上传处理
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // 拖拽上传
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('video/'));
+            if (files.length > 0) {
+                addVideos(files);
+            }
+        });
+
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            addVideos(files);
+        }
+
+        function addVideos(files) {
+            files.forEach(file => {
+                if (file.type.startsWith('video/')) {
+                    const videoUrl = URL.createObjectURL(file);
+                    videoFiles.push({
+                        name: file.name,
+                        url: videoUrl,
+                        file: file
+                    });
+                }
+            });
+            updateVideoList();
+            updateControls();
+        }
+
+        function updateVideoList() {
+            videoCount.textContent = videoFiles.length;
+            
+            if (videoFiles.length === 0) {
+                videoListContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">还没有上传视频，快来添加一些吧！</p>';
+                return;
+            }
+
+            videoListContainer.innerHTML = videoFiles.map((video, index) => `
+                <div class="video-item ${index === currentVideoIndex ? 'playing' : ''}">
+                    <span class="video-name" title="${video.name}">${video.name}</span>
+                    <div>
+                        <button class="play-btn" onclick="playVideo(${index})">播放</button>
+                        <button class="delete-btn" onclick="deleteVideo(${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function playVideo(index) {
+            if (index < 0 || index >= videoFiles.length) return;
+            
+            currentVideoIndex = index;
+            const video = videoFiles[index];
+            
+            videoElement.src = video.url;
+            videoElement.style.display = 'block';
+            currentPlaying.style.display = 'block';
+            currentVideoName.textContent = video.name;
+            
+            videoElement.play();
+            isPlaying = true;
+            
+            updateVideoList();
+            updateControls();
+        }
+
+        function playRandom() {
+            if (videoFiles.length === 0) {
+                alert('请先上传一些视频文件！');
+                return;
+            }
+            
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * videoFiles.length);
+            } while (randomIndex === currentVideoIndex && videoFiles.length > 1);
+            
+            playVideo(randomIndex);
+        }
+
+        function togglePlayPause() {
+            if (currentVideoIndex === -1) return;
+            
+            if (videoElement.paused) {
+                videoElement.play();
+                isPlaying = true;
+            } else {
+                videoElement.pause();
+                isPlaying = false;
+            }
+        }
+
+        function playNext() {
+            if (videoFiles.length === 0) return;
+            const nextIndex = (currentVideoIndex + 1) % videoFiles.length;
+            playVideo(nextIndex);
+        }
+
+        function playPrevious() {
+            if (videoFiles.length === 0) return;
+            const prevIndex = currentVideoIndex === 0 ? videoFiles.length - 1 : currentVideoIndex - 1;
+            playVideo(prevIndex);
+        }
+
+        function deleteVideo(index) {
+            if (confirm('确定要删除这个视频吗？')) {
+                // 释放URL对象
+                URL.revokeObjectURL(videoFiles[index].url);
+                
+                // 如果删除的是当前播放的视频
+                if (index === currentVideoIndex) {
+                    videoElement.pause();
+                    videoElement.src = '';
+                    videoElement.style.display = 'none';
+                    currentPlaying.style.display = 'none';
+                    currentVideoIndex = -1;
+                    isPlaying = false;
+                } else if (index < currentVideoIndex) {
+                    currentVideoIndex--;
+                }
+                
+                videoFiles.splice(index, 1);
+                updateVideoList();
+                updateControls();
+            }
+        }
+
+        function clearAll() {
+            if (videoFiles.length === 0) return;
+            
+            if (confirm('确定要清空所有视频吗？')) {
+                // 释放所有URL对象
+                videoFiles.forEach(video => URL.revokeObjectURL(video.url));
+                
+                videoFiles = [];
+                currentVideoIndex = -1;
+                isPlaying = false;
+                
+                videoElement.pause();
+                videoElement.src = '';
+                videoElement.style.display = 'none';
+                currentPlaying.style.display = 'none';
+                
+                updateVideoList();
+                updateControls();
+            }
+        }
+
+        function updateControls() {
+            const hasVideos = videoFiles.length > 0;
+            const hasCurrentVideo = currentVideoIndex !== -1;
+            
+            document.getElementById('playPauseBtn').disabled = !hasCurrentVideo;
+            document.getElementById('prevBtn').disabled = !hasVideos;
+            document.getElementById('nextBtn').disabled = !hasVideos;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // 视频事件监听
+        videoElement.addEventListener('timeupdate', () => {
+            if (videoElement.duration) {
+                const progress = (videoElement.currentTime / videoElement.duration) * 100;
+                progressBar.style.width = progress + '%';
+                currentTime.textContent = formatTime(videoElement.currentTime);
+            }
+        });
+
+        videoElement.addEventListener('loadedmetadata', () => {
+            duration.textContent = formatTime(videoElement.duration);
+        });
+
+        videoElement.addEventListener('ended', () => {
+            // 视频播放结束后自动播放下一个
+            if (videoFiles.length > 1) {
+                playNext();
+            } else {
+                isPlaying = false;
+            }
+        });
+
+        videoElement.addEventListener('play', () => {
+            isPlaying = true;
+        });
+
+        videoElement.addEventListener('pause', () => {
+            isPlaying = false;
+        });
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            switch(e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    togglePlayPause();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    playNext();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    playPrevious();
+                    break;
+                case 'KeyR':
+                    e.preventDefault();
+                    playRandom();
+                    break;
+            }
+        });
+
+        // 初始化
+        updateControls();
+    </script>
+</body>
+</html>
